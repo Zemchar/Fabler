@@ -6,6 +6,16 @@ class program
     static public Dictionary<string, string> storyProperties = new Dictionary<string, string>();
     static public Dictionary<string, string> playerProperties = new Dictionary<string, string>();
     static public void resetConsoleColor() { Console.ForegroundColor = ConsoleColor.White; }
+    static public string pronounReplacement(string input, string character)
+    {
+        input = input.Replace(storyProperties["cpronoun1"].ToString(), characterProperties[character.ToLower()]["Pro1"].ToString());
+        input = input.Replace(storyProperties["cpronoun2"].ToString(), characterProperties[character.ToLower()]["Pro2"].ToString());
+        input = input.Replace(storyProperties["cpronoun3"].ToString(), characterProperties[character.ToLower()]["Pro3"].ToString());
+        input = input.Replace(storyProperties["ppronoun1"].ToString(), playerProperties["Pro1"].ToString());
+        input = input.Replace(storyProperties["ppronoun2"].ToString(), playerProperties["Pro2"].ToString());
+        input = input.Replace(storyProperties["ppronoun3"].ToString(), playerProperties["Pro3"].ToString());
+        return input;
+    }
     static public void diagFormatter(string input = null, MatchCollection matchCollection = null, string playerName = null, Array sourceFile = null)
     {
         if (sourceFile != null)
@@ -46,27 +56,36 @@ class program
         {
             if (match.Value.GetType() == typeof(string))
             {
-                try
+                if (match.Value.ToString().Contains("n"))
                 {
-                    string color = characterProperties[match.Value.ToLower()]["Color"];
-                    string nameReplacement = characterProperties[match.Value.ToLower()]["Name"];
-                    input = input.Replace(storyProperties["cpronoun1"].ToString(), characterProperties[match.Value.ToLower()]["Pro1"].ToString());
-                    input = input.Replace(storyProperties["cpronoun2"].ToString(), characterProperties[match.Value.ToLower()]["Pro2"].ToString());
-                    input = input.Replace(storyProperties["cpronoun3"].ToString(), characterProperties[match.Value.ToLower()]["Pro3"].ToString());
-                    input = input.Replace(storyProperties["ppronoun1"].ToString(), playerProperties["Pro1"].ToString());
-                    input = input.Replace(storyProperties["ppronoun2"].ToString(), playerProperties["Pro2"].ToString());
-                    input = input.Replace(storyProperties["ppronoun3"].ToString(), playerProperties["Pro3"].ToString());
-                    Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color, true);
-                    Console.WriteLine($"{nameReplacement}: {input}");
-                    resetConsoleColor();
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    string[] secondaryPronoun = match.Value.ToString().Split(':');
+                    if (secondaryPronoun.Length > 1)
+                    {
+                        input = pronounReplacement(input, secondaryPronoun[1]);
+                    }
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{input}");
                     resetConsoleColor();
                     return;
+                }
+                else
+                {
+                    try
+                    {
+                        string color = characterProperties[match.Value.ToLower()]["Color"];
+                        string nameReplacement = characterProperties[match.Value.ToLower()]["Name"];
+                        input = pronounReplacement(input, match.Value.ToLower());
+                        Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), color, true);
+                        Console.WriteLine($"{nameReplacement}: {input}");
+                        resetConsoleColor();
+                        return;
+                    } catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{input}");
+                        resetConsoleColor();
+                        return;
+                    }
                 }
             }
         }
@@ -82,7 +101,7 @@ class program
         if (args.Length == 0)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"To begin, please provide the path of your story file (.txt/.story): ");
+            Console.WriteLine($"To begin, please provide the path of your story file (.txt): ");
             Console.ForegroundColor = ConsoleColor.Cyan;
             sourceFile = @$"{Console.ReadLine()}";
             resetConsoleColor();
