@@ -49,3 +49,6 @@ The last line of your file should be structured like this (all on one line!):
 ### This file:
 [testdoc.txt](https://github.com/Zemchar/SmutEngine/files/8828036/testdoc.txt)
 
+### Yeilds:
+![2022-06-02 18-26-58](https://user-images.githubusercontent.com/48448818/171755215-ada866c8-1af3-4d04-8ff7-48a7966f6a15.gif)
+
