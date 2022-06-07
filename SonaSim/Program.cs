@@ -56,7 +56,7 @@ class program
         {
             if (match.Value.GetType() == typeof(string))
             {
-                if (match.Value.ToString().Contains("n"))
+                if (match.Value.ToString().Contains('n'))
                 {
                     string[] secondaryPronoun = match.Value.ToString().Split(':');
                     if (secondaryPronoun.Length > 1)
@@ -97,7 +97,7 @@ class program
         var breadcrumbs = new List<int>();
         int nextDiagIndex = 0;
         bool gameActive = true;
-        string sourceFile = $@"";
+        string sourceFile;
         if (args.Length == 0)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -186,20 +186,24 @@ class program
                         destIndex++;
                         displayChoices += $"\n[{destIndex}] {Regex.Replace(match.Value, @"\[.*?\]", "", RegexOptions.Compiled | RegexOptions.Multiline).Trim()}";
                     }
-                    Console.WriteLine(displayChoices + "\nChoose >");
-                    try
+                    bool retry = true;
+                    Console.WriteLine(displayChoices);
+                    while (retry == true)
                     {
-                        Console.SetCursorPosition(9, Console.CursorTop - 1);
-                        nextDiagIndex = dest[int.Parse(Console.ReadLine())];
+                        try
+                        {
+                            Console.WriteLine("\nChoose >");
+                            Console.SetCursorPosition(9, Console.CursorTop - 1);
+                            nextDiagIndex = dest[int.Parse(Console.ReadLine())];
+                            retry = false;
 
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("That is not a valid choice. Please Select again:");
-                        resetConsoleColor();
-
-                        nextDiagIndex = dest[int.Parse(Console.ReadLine())];
+                        } catch (KeyNotFoundException)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("That is not a valid choice. Please Select again.");
+                            resetConsoleColor();
+                            retry = true;
+                        }
                     }
                 }
                 else
