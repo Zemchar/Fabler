@@ -1,11 +1,12 @@
-# Smut Engine
-Alternative name: SonaSim
+# Fabler
 
 Simple little project I made to practice c#. Before this I have never touched it.
 This is a visual novel engine that uses specially formatted files to create interactive experinces you can play in your command line
 
+It was designed with ease of use and easy translation in mind. 
+
 ## How to use
-For Readers: Start the program, provide the file and go!
+For Readers: Start the program, provide a file and go!
 
 For Authors: Read on.
 
